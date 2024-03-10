@@ -3,6 +3,7 @@ package com.lad.business;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import lombok.Data;
 
@@ -15,12 +16,14 @@ public class Timer extends Label {
     private int hours;
     private int minutes;
     private int seconds;
+    private boolean isRunning = true;
     private Timeline timeline;
 
     public Timer(int hours, int minutes, int seconds) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
+        this.setFont(new Font("Arial", 32));
         this.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer(this)));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -40,16 +43,19 @@ public class Timer extends Label {
     }
 
     public void start() {
+        this.isRunning = true;
         this.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         timeline.play();
     }
 
     public void pause() {
+        this.isRunning = false;
         timeline.pause();
         HistoryTool.recordHistory(this);
     }
 
     public void reset(Label timeLabel) {
+        this.isRunning = false;
         timeline.stop();
         hours = 0;
         minutes = 0;
