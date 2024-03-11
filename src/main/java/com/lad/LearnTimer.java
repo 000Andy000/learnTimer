@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.scene.control.*;
@@ -38,7 +39,13 @@ public class LearnTimer extends Application {
 
         // 提示窗口
         Stage stage = new Stage();
-        ReminderWindow reminderWindow = new ReminderWindow(stage, timer::pause);
+        // 设置为应用程序模态
+        stage.initModality(Modality.APPLICATION_MODAL);
+        // 始终在最上层
+        stage.setAlwaysOnTop(true);
+        ReminderWindow reminderWindow = new ReminderWindow(stage, () -> {
+            timer.pause(primaryStage);
+        });
 
         // 将两个按钮放在同一行
         // 水平布局，按钮间隔为10
@@ -62,21 +69,28 @@ public class LearnTimer extends Application {
         primaryStage.show();
         // 设置关闭事件
         primaryStage.setOnCloseRequest(e -> {
-            timer.pause();
+            timer.pause(primaryStage);
             Platform.exit();
         });
         // 设置按钮事件
         startButton.setOnAction(e -> {
-            timer.start();
+            // 计时器开始
+            timer.start(primaryStage);
+            // 开始弹窗出现倒计时
+            reminderWindow.startReminderCountdown();
         });
-        reminderWindow.show();
+        stopButton.setOnAction(e -> {
+            // 计时器暂停
+            timer.pause(primaryStage);
+            // 弹窗出现倒计时停止
+            reminderWindow.stopReminderCountdown();
+        });
 
-        stopButton.setOnAction(e -> timer.pause());
+        // 开始弹窗出现倒计时
+        reminderWindow.startReminderCountdown();
 
-
-
-
-        timer.start();
+        // 程序打开时计时器开始
+        timer.start(primaryStage);
     }
 
 

@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Data;
 
@@ -42,13 +43,15 @@ public class Timer extends Label {
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
     }
 
-    public void start() {
+    public void start(Stage stage) {
+        stage.setAlwaysOnTop(false);
         this.isRunning = true;
         this.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         timeline.play();
     }
 
-    public void pause() {
+    public void pause(Stage stage) {
+        stage.setAlwaysOnTop(true);
         this.isRunning = false;
         timeline.pause();
         HistoryTool.recordHistory(this);
