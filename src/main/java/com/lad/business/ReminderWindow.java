@@ -16,9 +16,9 @@ import javafx.util.Duration;
 
 public class ReminderWindow {
     // 确认时间
-    private final int CONFIRM_TIME = 5;
+    private final int CONFIRM_TIME = 8;
     // 弹窗出现时间间隔
-    private final int REAPPEAR_TIME = 5;
+    private final int REAPPEAR_TIME = 10*60;
 
     private Stage stage;
     private Runnable onTimeout;
